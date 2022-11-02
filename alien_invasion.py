@@ -5,7 +5,7 @@ from settings import Settings
 
 from ship import Ship
 
-from Nothing.bullet import Bullet
+from bullet import Bullet
 
 
 
