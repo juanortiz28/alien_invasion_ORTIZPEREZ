@@ -4,12 +4,20 @@ class Ship:
     def __init__(self, ai_game):
         """ship's starting position"""
         self.screen = ai_game.screen
+        self.angle = ai_game.angle
         self.settings = ai_game.settings
         self.screen_rect = ai_game.screen.get_rect()
 
         #load up ship
-        self.image = pygame.image.load('images/ship.bmp')
+
+        self.og_image = pygame.image.load('images/ship.bmp')
+        self.image = self.og_image
         self.rect = self.image.get_rect()
+
+        rot_image = pygame.transform.rotate(self.image, self.angle)
+        rot_rect = rot_image.get_rect(center=self.rect.center)
+        self.image = rot_image
+        self.rect = rot_rect
 
         # start each ship at the bottom and center
         self.rect.midbottom = self.screen_rect.midbottom

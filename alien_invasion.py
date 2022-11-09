@@ -18,6 +18,7 @@ class AlienInvasion:
         self.settings.screen_height = self.screen.get_rect().height
         # self.screen = pygame.display.set_mode((800, 600))
         pygame.display.set_caption("Alien Invasion")
+        self.angle = -90
         self.ship = Ship(self)
         self.bullets = pygame.sprite.Group()
         self.aliens = pygame.sprite.Group()
@@ -86,18 +87,38 @@ class AlienInvasion:
 
     def _check_keydown_events(self, event):
         """"respond to keypresses"""
-        if event.key == pygame.K_q:
-            sys.exit()
-        elif event.key == pygame.K_RIGHT:
+        if event.key == pygame.K_RIGHT:
+            self.angle = -90
+            self.ship.image = pygame.transform.rotate(self.ship.og_image, self.angle)
             self.ship.moving_right = True
         elif event.key == pygame.K_LEFT:
+            self.angle = 90
+            self.ship.image = pygame.transform.rotate(self.ship.og_image, self.angle)
             self.ship.moving_left = True
-        elif event.key == pygame.K_UP:
+        if event.key == pygame.K_UP:
+            self.angle = 0
+            self.ship.image = pygame.transform.rotate(self.ship.og_image, self.angle)
             self.ship.moving_up = True
         elif event.key == pygame.K_DOWN:
+            self.angle = 180
+            self.ship.image = pygame.transform.rotate(self.ship.og_image, self.angle)
             self.ship.moving_down = True
+        elif event.key == pygame.K_q:
+            sys.exit()
         elif event.key == pygame.K_SPACE:
             self._fire_bullets()
+        # if event.key == pygame.K_q:
+        #     sys.exit()
+        # elif event.key == pygame.K_RIGHT:
+        #     self.ship.moving_right = True
+        # elif event.key == pygame.K_LEFT:
+        #     self.ship.moving_left = True
+        # elif event.key == pygame.K_UP:
+        #     self.ship.moving_up = True
+        # elif event.key == pygame.K_DOWN:
+        #     self.ship.moving_down = True
+        # elif event.key == pygame.K_SPACE:
+        #     self._fire_bullets()
     def _check_keyup_events(self, event):
         """respond to key releases"""
         if event.key == pygame.K_RIGHT:
@@ -120,11 +141,24 @@ class AlienInvasion:
         for bullet in self.bullets.copy():
             if bullet.rect.bottom <= 0:
                 self.bullets.remove(bullet)
-            # print(len(self.bullets))
+        self._check_bullet_alien_collisions()
+    def _check_bullet_alien_collisions(self):
+        #check if any bullets hit the aliens
+        #if so, eliminate the alien and bullet
+        collisions = pygame.sprite.groupcollide(self.bullets, self.aliens, True, True)
+        if not self.aliens:
+            #destroy bullets and create a new fleet
+            self.bullets.empty()
+            self._create_fleet()
     def _update_aliens(self):
         """update the positions of aliens in the fleet"""
         self.aliens.update()
+
+        #look for alien/ship collisions
+        if pygame.sprite.spritecollideany(self.ship, self.aliens):
+            print("SHIP HIT!!!")
         self._check_fleet_edges()
+
     def _check_fleet_edges(self):
         """respond to aliens at edge"""
         for alien in self.aliens.sprites():
