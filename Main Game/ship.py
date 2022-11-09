@@ -10,7 +10,7 @@ class Ship:
 
         #load up ship
 
-        self.og_image = pygame.image.load('images/ship.bmp')
+        self.og_image = pygame.image.load('../images/ship.bmp')
         self.image = self.og_image
         self.rect = self.image.get_rect()
 
@@ -49,7 +49,11 @@ class Ship:
         self.rect.x = self.x
         self.rect.y = self.y
 
-
+    def center_ship(self):
+        """center after collision"""
+        self.rect.midbottom = self.screen_rect.midbottom
+        self.x = float(self.rect.x)
+        self.y = float(self.rect.y)
     def blitme(self):
         """draw ship at current location"""
         self.screen.blit(self.image, self.rect)
