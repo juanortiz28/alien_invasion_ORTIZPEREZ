@@ -103,10 +103,14 @@ class AlienInvasion:
         if collisions:
             self.stats.score += self.settings.alien_score * len(self.aliens)
             self.sb.prep_score()
+
+
     def _update_aliens(self):
         self.aliens.update()
         if pygame.sprite.spritecollideany(self.ship, self.aliens):
             self._ship_hit()
+            self.stats.lives += 1
+            self.sl.prep_score()
         self._check_fleet_edges()
         self._check_aliens_bottom()
 
@@ -144,6 +148,7 @@ class AlienInvasion:
             bullet.draw_bullet()
         self.aliens.draw(self.screen)
         self.sb.show_score()
+        self.sl.show_score()
         if not self.stats.game_active:
             self.play_button.draw_button()
         pygame.display.flip()
