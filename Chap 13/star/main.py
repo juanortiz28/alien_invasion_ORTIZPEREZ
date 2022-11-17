@@ -52,7 +52,6 @@ class Galaxy:
         star.rect.y = star_height + random_y
         self.stars.add(star)
     def _update_screen(self):
-        """updates images on screen and flip to the new screen"""
         self.screen.fill(self.bg_color)
         self.stars.draw(self.screen)
         pygame.display.flip()

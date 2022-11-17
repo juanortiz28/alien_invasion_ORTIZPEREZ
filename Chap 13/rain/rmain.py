@@ -39,8 +39,8 @@ class Rain_Drop:
         number_rows = available_space_y // (2 * rain_height)
         for row_number in range(number_rows):
             for rain_number in range(number_rain_x):
-                self._create_star(rain_number, row_number)
-    def _create_star(self, rain_number, row_number):
+                self._create_rain(rain_number, row_number)
+    def _create_rain(self, rain_number, row_number):
         rain = Rain(self)
         rain_width, rain_height = rain.rect.size
         rain.x = rain_width + 2 * rain_width * rain_number
@@ -50,6 +50,7 @@ class Rain_Drop:
     def _update_rain(self):
         self.rain.update()
         self._check_rain_edges()
+
     def _check_rain_edges(self):
         for rain in self.rain.sprites():
             if rain.check_edges():
